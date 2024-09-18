@@ -18,10 +18,7 @@ contract FundFundMe is Script {
     }
 
     function run() external {
-        address mostRecentlyDeployed = DevOpsTools.get_most_recent_deployment(
-            "FundMe",
-            block.chainid
-        ); // wwhat this does it looks inside broadcast folder and pick the most recent deployed contract from the "run-latest.json" based on the chainid
+        address mostRecentlyDeployed = DevOpsTools.get_most_recent_deployment("FundMe", block.chainid); // wwhat this does it looks inside broadcast folder and pick the most recent deployed contract from the "run-latest.json" based on the chainid
 
         fundFundMe(mostRecentlyDeployed);
     }
@@ -36,10 +33,7 @@ contract WithdrawFundMe is Script {
     }
 
     function run() external {
-        address mostRecentlyDeployed = DevOpsTools.get_most_recent_deployment(
-            "FundMe",
-            block.chainid
-        ); // wwhat this does it looks inside broadcast folder and pick the most recent deployed contract from the "run-latest.json" based on the chainid
+        address mostRecentlyDeployed = DevOpsTools.get_most_recent_deployment("FundMe", block.chainid); // wwhat this does it looks inside broadcast folder and pick the most recent deployed contract from the "run-latest.json" based on the chainid
         vm.startBroadcast();
         withdrawFundMe(mostRecentlyDeployed);
         vm.stopBroadcast();

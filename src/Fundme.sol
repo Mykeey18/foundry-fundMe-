@@ -21,15 +21,12 @@ contract FundMe {
 
     function fund() public payable {
         // to enable a function to receive a native blockchain token such as Ethereum, it needs to be marked as payable
-        require(
-            msg.value.getConversionRate(s_priceFeed) >= MINIMUM_USD,
-            "you no get money"
-        ); // it means the user has to spent at least $5
+        require(msg.value.getConversionRate(s_priceFeed) >= MINIMUM_USD, "you no get money"); // it means the user has to spent at least $5
         // If we want a function to fail under certain conditions, we can use the `require` statement
         // since msg.value is measured in eth/gwei and the minimu is $5 then we have to introduce oracle/cahinlink
         s_funders.push(msg.sender); // The `msg.sender' refers to the address that initiates the transaction
         s_addressToAmountFunded[msg.sender] += msg.value; // associates each funder's address with the total amount they have contributed
-        // `+=`: adds a value to an existing one. `x = x + y` is equivalent to `x += y`
+            // `+=`: adds a value to an existing one. `x = x + y` is equivalent to `x += y`
     }
 
     // to determine the price of eth in usd we need a fn to do that
@@ -37,8 +34,7 @@ contract FundMe {
     // if we want to keeo track of those that send us funds, we can create a list/array of that
 
     address[] private s_funders; //priveate is gas efficient compared to public
-    mapping(address funder => uint256 amountFunded)
-        private s_addressToAmountFunded;
+    mapping(address funder => uint256 amountFunded) private s_addressToAmountFunded;
 
     address private immutable i_owner;
     AggregatorV3Interface private s_priceFeed;
@@ -56,19 +52,13 @@ contract FundMe {
 
     function cheaperWithdraw() public onlyOwner {
         uint256 funderLength = s_funders.length; // we are reading from storage only one time compared to "for" under withdraw fn
-        for (
-            uint256 funderIndex = 0;
-            funderIndex < funderLength;
-            funderIndex++
-        ) {
+        for (uint256 funderIndex = 0; funderIndex < funderLength; funderIndex++) {
             address funder = s_funders[funderIndex];
             s_addressToAmountFunded[funder] = 0; // this is now a memory variable which cost less gas
         }
         // to reset the array
         s_funders = new address[](0);
-        (bool callSucess, ) = payable(msg.sender).call{
-            value: address(this).balance
-        }("");
+        (bool callSucess,) = payable(msg.sender).call{value: address(this).balance}("");
         // The `call` function returns two variables: a boolean for success or failure, and a byte object which stores returned data if any
         require(callSucess, "call failed");
     }
@@ -78,11 +68,7 @@ contract FundMe {
         // writing line 64 first before 63 has the opposite meaning of above
 
         // for (/* staring index, ending index, step amount */) (format for writing for-loops
-        for (
-            uint256 funderIndex = 0;
-            funderIndex < s_funders.length;
-            funderIndex++
-        ) {
+        for (uint256 funderIndex = 0; funderIndex < s_funders.length; funderIndex++) {
             // "++" means itself + 1 e.g. `funderIndex++`: shorthand for `funderIndex = funderIndex + 1`
 
             address funder = s_funders[funderIndex];
@@ -92,9 +78,7 @@ contract FundMe {
         s_funders = new address[](0);
         // There are three diff ways of withdrawing i.e transfer, send and call
         // call is the modern way of withdrawing/ sending eth out
-        (bool callSucess, ) = payable(msg.sender).call{
-            value: address(this).balance
-        }("");
+        (bool callSucess,) = payable(msg.sender).call{value: address(this).balance}("");
         // The `call` function returns two variables: a boolean for success or failure, and a byte object which stores returned data if any
         require(callSucess, "call failed");
     }
@@ -130,9 +114,7 @@ contract FundMe {
     /**
      * view/pure fuunctions (Getters
      */
-    function getAddressToAmountFunded(
-        address fundingAddress
-    ) external view returns (uint256) {
+    function getAddressToAmountFunded(address fundingAddress) external view returns (uint256) {
         return s_addressToAmountFunded[fundingAddress];
     }
 

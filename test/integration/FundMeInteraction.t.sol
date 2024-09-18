@@ -28,6 +28,6 @@ contract FundMeInteraction is Test {
         WithdrawFundMe withdrawFundMe = new WithdrawFundMe();
         withdrawFundMe.withdrawFundMe(address(fundMe)); // we are withdrawing using our script
 
-     assert(address(fundMe).balance == 0);
+        assert(address(fundMe).balance == 0);
     }
 }
